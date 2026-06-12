@@ -43,4 +43,4 @@ def create_tables():
     conn.close()
 
     return "table books and tablet members created"
-print(create_tables())
+
