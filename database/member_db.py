@@ -1,8 +1,4 @@
-from enum import member
-
 from database.db_connection import get_connection
-# from routes.member_routes import memberdb
-
 
 class MemberDB:
     def __init__(self):
@@ -74,7 +70,7 @@ class MemberDB:
         self.connection.commit()
         return member_updated
 
-    def increment_borrowed(self,member_id):
+    def increment_borrows(self, member_id):
         the_member = self.get_member_by_id(member_id)
         if not the_member:
             raise NameError
@@ -94,13 +90,6 @@ class MemberDB:
         sql = ("SELECT id, total_borrows FROM members order by total_borrows desc limit 1")
         self.cursor.execute(sql)
         return self.cursor.fetchall()
-
-
-
-
-
-
-
 
     def chack_data(self, data: dict) -> bool:
         list_of_keys = ["name", "email"]

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException
 from database import book_db
 from routes.member_routes import memberdb
 
@@ -39,7 +39,7 @@ def update_book(book_id: int, title: str, author: str, genre: str):
     except NameError:
         raise HTTPException(status_code= 404, detail= "book not exists.")
 
-@router.put("/books/{id}/borrowed/{member_id}")
+@router.put("/books/{id}/borrow/{member_id}")
 def borrowed_book(book_id: int, member_id: int):
     member = member_class.get_member_by_id(member_id)
     if not member:
@@ -48,7 +48,7 @@ def borrowed_book(book_id: int, member_id: int):
         raise HTTPException(status_code=400, detail="member is not active")
     try:
         borrow = bookdb.set_available(book_id, "borrowed", member_id)
-        memberdb.increment_borrowed(member_id)
+        memberdb.increment_borrows(member_id)
         return borrow
 
     except KeyError:

@@ -1,5 +1,4 @@
 from database.db_connection import get_connection
-
 class TooMuchBooks(Exception):
     pass
 
@@ -66,11 +65,7 @@ class BookDB:
         if val == "borrowed":
             if the_book["is_available"] == False:
                 raise KeyError
-            sum_of_borrowed = 0
-            for book in self.get_all_books():
-                if book["borrowed_by_member_id"] == member_id:
-                    sum_of_borrowed +=1
-            if sum_of_borrowed > 2:
+            if self.count_active_borrows_by_member(member_id) > 2:
                 raise TooMuchBooks
 
             sql = ("UPDATE books SET `is_available` = FALSE ,`borrowed_by_member_id` = %s WHERE `id` = %s")
@@ -116,7 +111,10 @@ class BookDB:
             raise ValueError
         return by_genre[0]
 
-
+    def count_active_borrows_by_member(self, member_id):
+        sql = ("SELECT COUNT(*) AS b FROM books WHERE borrowed_by_member_id = %s")
+        self.cursor.execute(sql, (member_id,))
+        return self.cursor.fetchall()[0]["b"]
 
     def chack_data(self, data: dict) -> bool:
         list_of_genres = [ "Fiction" , "Non-Fiction" , "Science" , "History" , "Other"]
@@ -127,5 +125,3 @@ class BookDB:
         if data["genre"] not in list_of_genres:
             raise ValueError
         return True
-
-
