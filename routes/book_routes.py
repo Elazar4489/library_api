@@ -1,7 +1,10 @@
 from fastapi import FastAPI, APIRouter, HTTPException
 from database import book_db
-bookdb = book_db.BookDB()
+from routes.member_routes import memberdb
 
+bookdb = book_db.BookDB()
+member_class = memberdb
+from database.book_db import TooMuchBooks
 router = APIRouter()
 @router.post("/books")
 def create_book(title: str, author: str, genre: str):
@@ -38,15 +41,28 @@ def update_book(book_id: int, title: str, author: str, genre: str):
 
 @router.put("/books/{id}/borrowed/{member_id}")
 def borrowed_book(book_id: int, member_id: int):
+    member = member_class.get_member_by_id(member_id)
+    if not member:
+        raise HTTPException(status_code=404, detail="member not exists.")
+    elif member["is_active"] == False:
+        raise HTTPException(status_code=400, detail="member is not active")
     try:
-        return bookdb.set_available(book_id, "borrowed", member_id)
+        borrow = bookdb.set_available(book_id, "borrowed", member_id)
+        memberdb.increment_borrowed(member_id)
+        return borrow
+
     except KeyError:
         raise HTTPException(status_code=400, detail=f"the book: {book_id} is already borrowed")
     except NameError:
         raise HTTPException(status_code=404, detail="book not exists.")
+    except TooMuchBooks:
+        raise HTTPException(status_code=400, detail= "Member has reached maximum borrows")
 
 @router.put("/books/{id}/return/{member_id}")
 def return_book(book_id: int, member_id: int):
+    member = member_class.get_member_by_id(member_id)
+    if not member:
+        raise HTTPException(status_code=404, detail="member not exists.")
     try:
         return bookdb.set_available(book_id, "return", member_id)
     except KeyError:
@@ -55,7 +71,5 @@ def return_book(book_id: int, member_id: int):
         raise HTTPException(status_code=404, detail="book not exists.")
     except ValueError:
         raise HTTPException(status_code=400, detail=f"the book: {book_id} is already borrowed to someone else")
- #TODO להוסיף שגיאות בחבר בשני הפונקציות האחרונות
-
 
 

@@ -1,5 +1,8 @@
 from database.db_connection import get_connection
 
+class TooMuchBooks(Exception):
+    pass
+
 class BookDB:
     def __init__(self):
         self.connection = get_connection()
@@ -63,25 +66,55 @@ class BookDB:
         if val == "borrowed":
             if the_book["is_available"] == False:
                 raise KeyError
+            sum_of_borrowed = 0
+            for book in self.get_all_books():
+                if book["borrowed_by_member_id"] == member_id:
+                    sum_of_borrowed +=1
+            if sum_of_borrowed > 2:
+                raise TooMuchBooks
 
-            sql = ("UPDATE books SET `is_available` = FALSE ,`borrowed_by_member_id` = %s")
-            self.cursor.execute(sql, (member_id,))
+            sql = ("UPDATE books SET `is_available` = FALSE ,`borrowed_by_member_id` = %s WHERE `id` = %s")
+            self.cursor.execute(sql, (member_id, book_id))
+
         elif val == "return":
             if the_book["is_available"] == True:
                 raise KeyError
-                return f"the book: {the_book} is not borrowed"
             elif the_book["borrowed_by_member_id"] != member_id:
                 raise ValueError
-                return f"the book: {the_book} is already borrowed to someone else"
-            sql = ("UPDATE books SET `is_available` = TRUE ,`borrowed_by_member_id` = NULL")
-            self.cursor.execute(sql)
-
+            sql = ("UPDATE books SET `is_available` = TRUE ,`borrowed_by_member_id` = NULL WHERE `id` = %s")
+            self.cursor.execute(sql, (book_id,))
+        self.connection.commit()
         the_book = self.get_book_by_id(book_id)
         return the_book
 
 
+    def count_total_books(self):
+        self.cursor.execute("SELECT COUNT(*) AS `all_books` FROM books")
+        return self.cursor.fetchone()["all_books"]
+
+    def count_available_books(self):
+        self.cursor.execute("SELECT COUNT(*) AS `available_books` FROM books WHERE `is_available` = TRUE")
+        return self.cursor.fetchone()["available_books"]
+
+    def count_borrowed_books(self):
+        self.cursor.execute("SELECT COUNT(*) AS `borrowed_books` FROM books WHERE `is_available` = FALSE")
+        return self.cursor.fetchone()["borrowed_books"]
 
 
+
+    def count_by_genre(self, genre):
+        sql = (
+            """
+            SELECT `genre` , COUNT(`id`) AS 'the_genre'
+            FROM books 
+            WHERE `genre` = %s
+            GROUP BY genre;
+            """)
+        self.cursor.execute(sql, (genre,))
+        by_genre = self.cursor.fetchall()
+        if not by_genre:
+            raise ValueError
+        return by_genre[0]
 
 
 
@@ -94,4 +127,5 @@ class BookDB:
         if data["genre"] not in list_of_genres:
             raise ValueError
         return True
+
 
