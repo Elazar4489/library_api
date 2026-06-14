@@ -15,7 +15,6 @@ formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(name)s | %(massag
 file_handler = logging.FileHandler("logs/app.log", encoding = "utf-8")
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
-coon = db_connection.get_connection()
 tables = db_connection.create_tables()
 
 app = FastAPI()

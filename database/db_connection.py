@@ -1,16 +1,23 @@
 import mysql.connector
 
-def get_connection():
-    conn = mysql.connector.connect(
-        host= "localhost",
-        user = "root",
-        password = "root",
-        database = "library_db"
-    )
-    return conn
+class GetConnection:
+    def __init__(self):
+        self.host = "localhost",
+        self.user = "root",
+        self.password = "root",
+        self.database = "library_db"
+
+    def get_conn(self):
+        conn = mysql.connector.connect(
+            host= "localhost",
+            user = "root",
+            password = "root",
+            database = "library_db"
+        )
+        return conn
 
 def create_tables():
-    conn = get_connection()
+    conn = GetConnection().get_conn()
     cursor = conn.cursor()
     cursor.execute(
         """
