@@ -1,0 +1,63 @@
+2026-06-15 12:44:28,195 | INFO | root | GET /books called
+2026-06-15 12:44:28,196 | INFO | root | The request 'get all books' was successfully received
+2026-06-15 12:44:39,356 | INFO | root | GET /books/{id} called
+2026-06-15 12:44:39,424 | INFO | root | Attempting a 'get book by id', id: 2 request
+2026-06-15 12:44:39,424 | INFO | root | The request 'get book by id', id: 2 was successfully received
+2026-06-15 12:44:46,347 | INFO | root | GET /books/{id} called
+2026-06-15 12:44:46,382 | INFO | root | Attempting a 'get book by id', id: 22 request
+2026-06-15 12:44:46,383 | ERROR | root | book 22 not exists
+2026-06-15 12:46:16,664 | INFO | root | PUT /members called
+2026-06-15 12:46:16,664 | INFO | root | Attempting a 'update member', id: 1 request
+2026-06-15 12:46:16,865 | INFO | root | The request 'update member', id: 1 was successfully received
+2026-06-15 12:46:37,773 | INFO | root | PUT /members called
+2026-06-15 12:46:37,773 | INFO | root | Attempting a 'update member', id: 33 request
+2026-06-15 14:46:53,093 | INFO | root | PUT /members called
+2026-06-15 14:46:53,093 | INFO | root | Attempting a 'update member', id: 33 request
+2026-06-15 14:48:12,922 | INFO | root | PUT /members called
+2026-06-15 14:48:12,923 | INFO | root | Attempting a 'update member', id: 33 request
+2026-06-15 14:48:12,972 | ERROR | root | member 33 not exists.
+2026-06-15 14:48:29,648 | INFO | root | PUT /members called
+2026-06-15 14:48:29,648 | INFO | root | Attempting a 'update member', id: 3 request
+2026-06-15 14:48:29,752 | ERROR | root | the email is already exists in the table.
+2026-06-15 14:48:49,121 | INFO | root | PUT /members called
+2026-06-15 14:48:49,121 | INFO | root | Attempting a 'update member', id: 3 request
+2026-06-15 14:48:49,303 | INFO | root | The request 'update member', id: 3 was successfully received
+2026-06-15 14:48:57,627 | INFO | root | PUT /members called
+2026-06-15 14:48:57,627 | INFO | root | Attempting a 'update member', id: 3 request
+2026-06-15 14:48:57,759 | INFO | root | The request 'update member', id: 3 was successfully received
+2026-06-15 14:49:03,530 | INFO | root | PUT /members called
+2026-06-15 14:49:03,530 | INFO | root | Attempting a 'update member', id: 4 request
+2026-06-15 14:49:03,635 | ERROR | root | the email is already exists in the table.
+2026-06-15 14:50:48,965 | INFO | root | PUT /members called
+2026-06-15 14:50:48,965 | INFO | root | Attempting a 'update member', id: 4 request
+2026-06-15 14:50:49,057 | ERROR | root | the email is already exists in the table.
+2026-06-15 14:51:23,636 | INFO | root | PUT /members/{id}/deactivate called
+2026-06-15 14:51:23,637 | INFO | root | Attempting a 'deactivate member', id: 2 request
+2026-06-15 14:51:23,723 | INFO | root | The request 'deactivate member', id: 2 was successfully received
+2026-06-15 14:51:35,965 | INFO | root | GET /books called
+2026-06-15 14:51:35,965 | INFO | root | The request 'get all books' was successfully received
+2026-06-15 14:52:07,544 | INFO | root | GET /members called
+2026-06-15 14:52:07,544 | INFO | root | The request 'get all members' was successfully received
+2026-06-15 14:52:30,368 | INFO | root | GET /reports/summary called
+2026-06-15 14:52:30,368 | INFO | root | Attempting a 'get summary report' request and successfully received
+2026-06-15 14:52:49,617 | INFO | root | PUT /members/{id}/deactivate called
+2026-06-15 14:52:49,617 | INFO | root | Attempting a 'deactivate member', id: 10 request
+2026-06-15 14:52:49,713 | INFO | root | The request 'deactivate member', id: 10 was successfully received
+2026-06-15 14:52:56,964 | INFO | root | GET /reports/summary called
+2026-06-15 14:52:56,964 | INFO | root | Attempting a 'get summary report' request and successfully received
+2026-06-15 14:53:21,421 | INFO | root | PUT /books/{id}/borrow/{member_id} called
+2026-06-15 14:53:21,421 | INFO | root | Attempting a 'borrowed book', id: 3 request
+2026-06-15 14:53:21,759 | INFO | root | The request borrowed book, id: 3 to member, id: 5 was successfully received.
+2026-06-15 14:53:28,617 | INFO | root | PUT /books/{id}/borrow/{member_id} called
+2026-06-15 14:53:28,618 | INFO | root | Attempting a 'borrowed book', id: 2 request
+2026-06-15 14:53:28,851 | INFO | root | The request borrowed book, id: 2 to member, id: 5 was successfully received.
+2026-06-15 14:53:38,685 | INFO | root | PUT /books/{id}/borrow/{member_id} called
+2026-06-15 14:53:38,685 | INFO | root | Attempting a 'borrowed book', id: 6 request
+2026-06-15 14:53:39,018 | INFO | root | The request borrowed book, id: 6 to member, id: 8 was successfully received.
+2026-06-15 14:54:09,387 | INFO | root | PUT /books/{id}/borrow/{member_id} called
+2026-06-15 14:54:09,388 | INFO | root | Attempting a 'borrowed book', id: 7 request
+2026-06-15 14:54:09,449 | ERROR | root | member 2 is not active
+2026-06-15 14:54:23,065 | INFO | root | GET /reports/summary called
+2026-06-15 14:54:23,065 | INFO | root | Attempting a 'get summary report' request and successfully received
+2026-06-15 14:55:32,749 | INFO | root | GET /reports/summary called
+2026-06-15 14:55:32,750 | INFO | root | Attempting a 'get summary report' request and successfully received

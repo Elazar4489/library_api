@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI, Depends
 from routes import book_routes
 from routes import member_routes
@@ -6,7 +7,8 @@ import logging
 from database import db_connection
 
 
-
+class IDNotFound(Exception):
+    pass
 
 
 logger = logging.getLogger()
@@ -15,6 +17,7 @@ formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(name)s | %(messag
 file_handler = logging.FileHandler("logs/app.log", encoding = "utf-8")
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
+
 tables = db_connection.create_tables()
 
 app = FastAPI()
@@ -22,4 +25,5 @@ app.include_router(book_routes.router)
 app.include_router(member_routes.router)
 app.include_router(report_routes.router)
 
-
+if __name__ == "__main__":
+    uvicorn.run(app, host= "localhost", port= 8000)

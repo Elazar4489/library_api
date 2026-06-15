@@ -1,18 +1,20 @@
 from database.db_connection import GetConnection
+#from main import IDNotFound
+import re
 class TooMuchBooks(Exception):
+    pass
+class GenreError(Exception):
     pass
 
 class BookDB:
     def __init__(self):
         self.connection = GetConnection()
 
-    def create_book(self, data: dict) -> dict | None:
+    def create_book(self, data) -> dict | None:
         try:
-            self.check_data(data)
-        except KeyError:
-            raise KeyError
-        except ValueError:
-            raise ValueError
+            self.check_genre(data["gener"])
+        except GenreError:
+            raise GenreError
         conn = self.connection.get_conn()
         cursor = conn.cursor(dictionary=True)
         try:
@@ -20,9 +22,6 @@ class BookDB:
             tp = (data["title"], data["author"], data["genre"])
             cursor.execute(sql, tp)
             conn.commit()
-            cursor.execute("SELECT MAX(`id`) FROM books;")
-            book_id = cursor.fetchone()["MAX(`id`)"]
-            return self.get_book_by_id(book_id)
         finally:
             cursor.close()
             conn.close()
@@ -55,13 +54,11 @@ class BookDB:
 
     def update_book(self, book_id, data):
         if not self.get_book_by_id(book_id):
-            raise NameError
+            raise IDNotFound
         try:
-            self.check_data(data)
-        except KeyError:
-            raise KeyError
-        except ValueError:
-            raise ValueError
+            self.check_genre(data["genre"])
+        except GenreError:
+            raise GenreError
         conn = self.connection.get_conn()
         cursor = conn.cursor(dictionary=True)
         try:
@@ -69,8 +66,6 @@ class BookDB:
             tp = (data["title"], data["author"], data["genre"], book_id)
             cursor.execute(sql, tp)
             conn.commit()
-            book_updated = self.get_book_by_id(book_id)
-            return book_updated
         finally:
             cursor.close()
             conn.close()
@@ -78,7 +73,7 @@ class BookDB:
     def set_available(self,book_id: int, val: str, member_id: int):
         the_book = self.get_book_by_id(book_id)
         if not the_book:
-            raise NameError
+            raise IDNotFound
         conn = self.connection.get_conn()
         cursor = conn.cursor(dictionary=True)
         try:
@@ -99,8 +94,6 @@ class BookDB:
                 sql = ("UPDATE books SET `is_available` = TRUE ,`borrowed_by_member_id` = NULL WHERE `id` = %s")
                 cursor.execute(sql, (book_id,))
             conn.commit()
-            the_book = self.get_book_by_id(book_id)
-            return the_book
         finally:
             cursor.close()
             conn.close()
@@ -172,12 +165,9 @@ class BookDB:
             cursor.close()
             conn.close()
 
-    def check_data(self, data: dict) -> bool:
-        list_of_genres = [ "Fiction" , "Non-Fiction" , "Science" , "History" , "Other"]
-        list_of_keys = ["title", "author", "genre"]
-        for key in list_of_keys:
-            if key not in data:
-                raise KeyError
-        if data["genre"] not in list_of_genres:
-            raise ValueError
+    def check_genre(self, genre: str) -> bool:
+        list_of_genres = ["Fiction" , "Non-Fiction" , "Science" , "History" , "Other"]
+        genre = re.sub(r'[^a-zA-Z]', '', genre).capitalize()
+        if genre not in list_of_genres:
+            raise GenreError
         return True
