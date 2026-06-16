@@ -61,3 +61,22 @@
 2026-06-15 14:54:23,065 | INFO | root | Attempting a 'get summary report' request and successfully received
 2026-06-15 14:55:32,749 | INFO | root | GET /reports/summary called
 2026-06-15 14:55:32,750 | INFO | root | Attempting a 'get summary report' request and successfully received
+2026-06-15 17:15:48,550 | INFO | root | POST /books called
+2026-06-15 17:15:48,551 | INFO | root | Attempting to create a new book
+2026-06-15 17:17:48,451 | INFO | root | POST /books called
+2026-06-15 17:17:48,451 | INFO | root | Attempting to create a new book
+2026-06-15 17:19:28,474 | INFO | root | POST /books called
+2026-06-15 17:19:28,474 | INFO | root | Attempting to create a new book
+2026-06-15 17:19:28,526 | INFO | root | New book added successfully
+2026-06-15 17:28:02,798 | INFO | root | POST /books called
+2026-06-15 17:28:02,799 | INFO | root | Attempting to create a new book
+2026-06-15 17:28:02,856 | INFO | root | New book added successfully
+2026-06-16 08:17:48,785 | INFO | root | GET /books called
+2026-06-16 08:17:48,786 | INFO | root | The request 'get all books' was successfully received
+2026-06-16 08:38:27,317 | INFO | root | GET /reports/summary called
+2026-06-16 08:38:27,318 | INFO | root | Attempting a 'get summary report' request and successfully received
+2026-06-16 08:39:08,584 | INFO | root | GET /reports/top-members called
+2026-06-16 08:39:08,584 | INFO | root | Attempting a 'get top member' request and successfully received
+2026-06-16 08:40:22,828 | INFO | root | GET /reports/books-by-genre called
+2026-06-16 08:40:22,828 | INFO | root | Attempting a 'count by genre', genre: fiction request
+2026-06-16 08:40:22,890 | INFO | root | The request 'count by genre', genre: fiction was successfully received

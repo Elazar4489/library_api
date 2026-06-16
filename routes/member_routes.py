@@ -4,8 +4,8 @@ import main
 import logging
 logger = logging.getLogger()
 memberdb = MemberDB()
-router = APIRouter()
-@router.post("/members")
+router = APIRouter(prefix= "/members", tags=["members"])
+@router.post("")
 def create_member(name: str, email: str):
     logger.info("POST /members called")
     try:
@@ -17,13 +17,13 @@ def create_member(name: str, email: str):
         logger.error("the email is already exists in the table.")
         raise HTTPException(status_code = 400, detail= "your email is already exists in the table.")
 
-@router.get("/members")
+@router.get("")
 def get_all_members():
     logger.info("GET /members called")
     logger.info("The request 'get all members' was successfully received")
     return memberdb.get_all_members()
 
-@router.get("/members/{id}")
+@router.get("/{member_id}")
 def get_member_by_id(member_id):
     logger.info("GET /members/{id} called")
     member = memberdb.get_member_by_id(member_id)
@@ -34,7 +34,7 @@ def get_member_by_id(member_id):
     logger.info(f"The request 'get member by id', id: {member_id} was successfully received")
     return member
 
-@router.put("/members/{id}")
+@router.put("/{member_id}")
 def update_member(member_id, name, email):
     logger.info("PUT /members called")
     try:
@@ -49,7 +49,7 @@ def update_member(member_id, name, email):
         logger.error(f"member {member_id} not exists.")
         raise HTTPException(status_code= 404, detail= f"member {member_id} not exists.")
 
-@router.put("/members/{id}/deactivate")
+@router.put("/{member_id}/deactivate")
 def deactivate_member(member_id):
     logger.info("PUT /members/{id}/deactivate called")
     try:
@@ -61,7 +61,7 @@ def deactivate_member(member_id):
         logger.error(f"member {member_id} not exists.")
         raise HTTPException(status_code= 404, detail= f"member {member_id} not exists.")
 
-@router.put("/members/{id}/activate")
+@router.put("/{member_id}/activate")
 def activate_member(member_id):
     logger.info("PUT /members/{id}/activate called")
     try:
@@ -69,6 +69,6 @@ def activate_member(member_id):
         member_updated = memberdb.activate_member(member_id)
         logger.info(f"The request 'activate member', id: {member_id} was successfully received")
         return member_updated
-    except IDNotFound:
+    except main.IDNotFound:
         logger.error(f"member {member_id} not exists.")
         raise HTTPException(status_code= 404, detail= f"member {member_id} not exists.")

@@ -12,7 +12,7 @@ class BookDB:
 
     def create_book(self, data) -> dict | None:
         try:
-            self.check_genre(data["gener"])
+            self.check_genre(data["genre"])
         except GenreError:
             raise GenreError
         conn = self.connection.get_conn()

@@ -1,14 +1,16 @@
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 from database import book_db
 from routes.member_routes import memberdb
 from database.book_db import TooMuchBooks, GenreError
 #from main import logger
+import main
 import logging
 logger = logging.getLogger()
 bookdb = book_db.BookDB()
 member_class = memberdb
-router = APIRouter()
-@router.post("/books")
+router = APIRouter(prefix="/books",tags=["books"])
+@router.post("")
 def create_book(title: str, author: str, genre: str):
     logger.info("POST /books called")
     try:
@@ -20,13 +22,13 @@ def create_book(title: str, author: str, genre: str):
         logger.error("the genre entered is not exists in the library!")
         raise HTTPException(status_code = 400, detail = "the genre you entered is not exists in the library!")
 
-@router.get("/books")
+@router.get("")
 def get_all_books():
     logger.info("GET /books called")
     logger.info("The request 'get all books' was successfully received")
     return bookdb.get_all_books()
 
-@router.get("/books/{id}")
+@router.get("/{book_id}")
 def get_book_by_id(book_id):
     logger.info("GET /books/{id} called")
     book = bookdb.get_book_by_id(book_id)
@@ -37,7 +39,7 @@ def get_book_by_id(book_id):
     logger.info(f"The request 'get book by id', id: {book_id} was successfully received")
     return book
 
-@router.put("/books/{id}")
+@router.put("/{book_id}")
 def update_book(book_id: int, title: str, author: str, genre: str):
     logger.info("PUT /books called")
     try:
@@ -48,11 +50,11 @@ def update_book(book_id: int, title: str, author: str, genre: str):
     except GenreError:
         logger.error(f"the genre entered: {genre} is not exists in the library!")
         raise HTTPException(status_code = 400, detail = "the genre you entered is not exists in the library!")
-    except IDNotFound:
+    except main.IDNotFound:
         logger.error(f"book {book_id} not exists.")
         raise HTTPException(status_code= 404, detail= f"book {book_id} not exists.")
 
-@router.put("/books/{id}/borrow/{member_id}")
+@router.put("/{book_id}/borrow/{member_id}")
 def borrowed_book(book_id: int, member_id: int):
     logger.info("PUT /books/{id}/borrow/{member_id} called")
     logger.info(f"Attempting a 'borrowed book', id: {book_id} request")
@@ -72,14 +74,14 @@ def borrowed_book(book_id: int, member_id: int):
     except KeyError:
         logger.error(f"the book: {book_id} is already borrowed")
         raise HTTPException(status_code=400, detail=f"the book: {book_id} is already borrowed")
-    except IDNotFound:
+    except main.IDNotFound:
         logger.error(f"book {book_id} not exists.")
         raise HTTPException(status_code=404, detail=f"book {book_id} not exists.")
     except TooMuchBooks:
         logger.error(f"Member id: {member_id} has reached maximum borrows")
         raise HTTPException(status_code=400, detail= f"Member id: {member_id} has reached maximum borrows")
 
-@router.put("/books/{id}/return/{member_id}")
+@router.put("/{book_id}/return/{member_id}")
 def return_book(book_id: int, member_id: int):
     logger.info("PUT /books/{id}/return/{member_id} called")
     member = member_class.get_member_by_id(member_id)
@@ -94,7 +96,7 @@ def return_book(book_id: int, member_id: int):
     except KeyError:
         logger.error(f"the book: {book_id} is not borrowed")
         raise HTTPException(status_code=400, detail=f"the book: {book_id} is not borrowed")
-    except IDNotFound:
+    except main.IDNotFound:
         logger.error(f"book {book_id} not exists.")
         raise HTTPException(status_code=404, detail=f"book {book_id} not exists.")
     except ValueError:
